@@ -1,7 +1,7 @@
 {
   "name": "local-aws",
-  "version": "0.0.1",
-  "description": "Local web console for S3 and SQS via LocalStack",
+  "version": "0.1.0",
+  "description": "LocalStack dev console for S3, SQS, DynamoDB, SNS, Secrets, Lambda, Logs, EventBridge, and Step Functions",
   "private": true,
   "type": "module",
   "main": "./dist/server.js",
@@ -13,8 +13,17 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
+    "@aws-sdk/client-cloudwatch-logs": "^3.1075.0",
+    "@aws-sdk/client-dynamodb": "^3.1075.0",
+    "@aws-sdk/client-eventbridge": "^3.1075.0",
+    "@aws-sdk/client-lambda": "^3.1075.0",
     "@aws-sdk/client-s3": "^3.1075.0",
+    "@aws-sdk/client-secrets-manager": "^3.1075.0",
+    "@aws-sdk/client-sfn": "^3.1075.0",
+    "@aws-sdk/client-sns": "^3.1075.0",
     "@aws-sdk/client-sqs": "^3.808.0",
+    "@aws-sdk/client-ssm": "^3.1075.0",
+    "@aws-sdk/lib-dynamodb": "^3.1075.0",
     "@aws-sdk/s3-request-presigner": "^3.1075.0",
     "@fastify/cors": "^11.0.1",
     "@fastify/multipart": "^9.0.3",

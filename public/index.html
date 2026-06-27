@@ -55,7 +55,10 @@
   <div class="main">
     <nav class="sidebar" aria-label="Main navigation">
       <div class="sidebar-section">
-        <div class="sidebar-label">SQS</div>
+        <button type="button" class="sidebar-label" data-action="toggle-sidebar-section" aria-expanded="true">
+          SQS
+          <span class="sidebar-chevron icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
         <button type="button" class="nav-item active" data-page="sqs-queues" data-action="navigate" aria-current="page">
           <span class="nav-icon icon icon-sm" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -75,9 +78,11 @@
           Publish Message
         </button>
       </div>
-      <div class="sidebar-divider"></div>
       <div class="sidebar-section">
-        <div class="sidebar-label">S3</div>
+        <button type="button" class="sidebar-label" data-action="toggle-sidebar-section" aria-expanded="true">
+          S3
+          <span class="sidebar-chevron icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
         <button type="button" class="nav-item" data-page="s3-buckets" data-action="navigate">
           <span class="nav-icon icon icon-sm" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -94,6 +99,168 @@
             </svg>
           </span>
           Object Browser
+        </button>
+      </div>
+      <div class="sidebar-section">
+        <button type="button" class="sidebar-label" data-action="toggle-sidebar-section" aria-expanded="true">
+          DynamoDB
+          <span class="sidebar-chevron icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <button type="button" class="nav-item" data-page="dynamodb-tables" data-action="navigate">
+          <span class="nav-icon icon icon-sm" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+            </svg>
+          </span>
+          Tables
+          <span class="nav-badge" id="dynamodbBadge">—</span>
+        </button>
+        <button type="button" class="nav-item" data-page="dynamodb-browser" data-action="navigate">
+          <span class="nav-icon icon icon-sm" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>
+            </svg>
+          </span>
+          Table Browser
+        </button>
+      </div>
+      <div class="sidebar-section">
+        <button type="button" class="sidebar-label" data-action="toggle-sidebar-section" aria-expanded="true">
+          SNS
+          <span class="sidebar-chevron icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <button type="button" class="nav-item" data-page="sns-topics" data-action="navigate">
+          <span class="nav-icon icon icon-sm" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3z"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+          </span>
+          Topics
+          <span class="nav-badge" id="snsBadge">—</span>
+        </button>
+        <button type="button" class="nav-item" data-page="sns-publish" data-action="navigate">
+          <span class="nav-icon icon icon-sm" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </span>
+          Publish
+        </button>
+      </div>
+      <div class="sidebar-section">
+        <button type="button" class="sidebar-label" data-action="toggle-sidebar-section" aria-expanded="true">
+          Secrets
+          <span class="sidebar-chevron icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <button type="button" class="nav-item" data-page="secrets-manager" data-action="navigate">
+          <span class="nav-icon icon icon-sm" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </span>
+          Secrets Manager
+          <span class="nav-badge" id="secretsBadge">—</span>
+        </button>
+        <button type="button" class="nav-item" data-page="secrets-parameters" data-action="navigate">
+          <span class="nav-icon icon icon-sm" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </span>
+          Parameters
+          <span class="nav-badge" id="parametersBadge">—</span>
+        </button>
+      </div>
+      <div class="sidebar-section">
+        <button type="button" class="sidebar-label" data-action="toggle-sidebar-section" aria-expanded="true">
+          Lambda
+          <span class="sidebar-chevron icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <button type="button" class="nav-item" data-page="lambda-functions" data-action="navigate">
+          <span class="nav-icon icon icon-sm" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+          </span>
+          Functions
+          <span class="nav-badge" id="lambdaBadge">—</span>
+        </button>
+        <button type="button" class="nav-item" data-page="lambda-invoke" data-action="navigate">
+          <span class="nav-icon icon icon-sm" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </span>
+          Invoke
+        </button>
+      </div>
+      <div class="sidebar-section">
+        <button type="button" class="sidebar-label" data-action="toggle-sidebar-section" aria-expanded="true">
+          Logs
+          <span class="sidebar-chevron icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <button type="button" class="nav-item" data-page="logs-groups" data-action="navigate">
+          <span class="nav-icon icon icon-sm" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+          </span>
+          Log Groups
+          <span class="nav-badge" id="logsBadge">—</span>
+        </button>
+        <button type="button" class="nav-item" data-page="logs-viewer" data-action="navigate">
+          <span class="nav-icon icon icon-sm" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+          </span>
+          Log Viewer
+        </button>
+      </div>
+      <div class="sidebar-section">
+        <button type="button" class="sidebar-label" data-action="toggle-sidebar-section" aria-expanded="true">
+          EventBridge
+          <span class="sidebar-chevron icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <button type="button" class="nav-item" data-page="eventbridge-rules" data-action="navigate">
+          <span class="nav-icon icon icon-sm" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+            </svg>
+          </span>
+          Rules
+          <span class="nav-badge" id="eventbridgeBadge">—</span>
+        </button>
+        <button type="button" class="nav-item" data-page="eventbridge-send" data-action="navigate">
+          <span class="nav-icon icon icon-sm" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </span>
+          Send Event
+        </button>
+      </div>
+      <div class="sidebar-section">
+        <button type="button" class="sidebar-label" data-action="toggle-sidebar-section" aria-expanded="true">
+          Step Functions
+          <span class="sidebar-chevron icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <button type="button" class="nav-item" data-page="sfn-machines" data-action="navigate">
+          <span class="nav-icon icon icon-sm" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+            </svg>
+          </span>
+          State Machines
+          <span class="nav-badge" id="sfnBadge">—</span>
+        </button>
+        <button type="button" class="nav-item" data-page="sfn-executions" data-action="navigate">
+          <span class="nav-icon icon icon-sm" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+          </span>
+          Executions
         </button>
       </div>
     </nav>
@@ -159,6 +326,14 @@
               <label class="form-label" for="publishBody">Message Body <span class="form-label-hint">(JSON or plain text)</span></label>
               <textarea class="form-textarea form-textarea-lg" id="publishBody" placeholder='{"key": "value"}'></textarea>
             </div>
+            <div class="form-group" id="publishAttributes">
+              <label class="form-label">Message Attributes</label>
+              <div id="publishAttributesRows"></div>
+              <button type="button" class="btn btn-secondary btn-sm" data-action="add-publish-attribute">
+                <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+                Add Attribute
+              </button>
+            </div>
             <div class="form-actions">
               <div class="form-actions-left">
                 <button class="btn btn-secondary btn-sm" data-action="format-json" data-target="publishBody">Format JSON</button>
@@ -193,6 +368,10 @@
             <div class="page-subtitle">Browse, upload, and manage files</div>
           </div>
           <div class="header-actions hidden" id="browserActions">
+            <button class="btn btn-secondary" data-action="open-modal" data-modal="modal-create-folder">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg></span>
+              New Folder
+            </button>
             <button class="btn btn-secondary" data-action="open-modal" data-modal="modal-upload">
               <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
               Upload
@@ -214,6 +393,440 @@
             </div>
           </div>
           <div id="browserContent" class="data-panel"></div>
+        </div>
+      </div>
+
+      <div id="page-dynamodb-tables" class="tab-panel">
+        <div class="page-header">
+          <div>
+            <div class="page-title">DynamoDB Tables</div>
+            <div class="page-subtitle">Create and manage NoSQL tables</div>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-primary" data-action="open-modal" data-modal="modal-create-table">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+              Create Table
+            </button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></span>
+              All Tables
+            </div>
+            <div class="search-wrap search-wrap-sm">
+              <span class="search-icon icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+              <input class="form-input" type="text" placeholder="Filter tables..." id="tableFilter" aria-label="Filter tables" />
+            </div>
+          </div>
+          <div id="tablesGrid" class="data-panel"></div>
+        </div>
+      </div>
+
+      <div id="page-dynamodb-browser" class="tab-panel">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Table Browser</div>
+            <div class="page-subtitle">Scan, query, and edit table items</div>
+          </div>
+        </div>
+        <nav class="breadcrumb hidden" id="dynamoBreadcrumb" aria-label="Table path"></nav>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title" id="dynamoBrowserTitle">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></span>
+              Select a Table
+            </div>
+            <div class="search-wrap search-wrap-xs">
+              <span class="search-icon icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+              <input class="form-input" type="text" placeholder="Filter items..." id="itemFilter" aria-label="Filter items" />
+            </div>
+          </div>
+          <div id="dynamoBrowserContent" class="data-panel"></div>
+        </div>
+      </div>
+
+      <div id="page-sns-topics" class="tab-panel">
+        <div class="page-header">
+          <div>
+            <div class="page-title">SNS Topics</div>
+            <div class="page-subtitle">Manage Simple Notification Service topics and subscriptions</div>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-primary" data-action="open-modal" data-modal="modal-create-topic">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+              Create Topic
+            </button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3z"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>
+              All Topics
+            </div>
+            <div class="search-wrap search-wrap-sm">
+              <span class="search-icon icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+              <input class="form-input" type="text" placeholder="Filter topics..." id="topicFilter" aria-label="Filter topics" />
+            </div>
+          </div>
+          <div id="topicsTableWrap" class="data-panel"></div>
+        </div>
+      </div>
+
+      <div id="page-sns-publish" class="tab-panel">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Publish to SNS</div>
+            <div class="page-subtitle">Send a message to any SNS topic</div>
+          </div>
+        </div>
+        <div class="card card-narrow">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span>
+              Message Editor
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label" for="snsPublishTopicSelect">Target Topic</label>
+              <select class="form-select" id="snsPublishTopicSelect">
+                <option value="">— select topic —</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="snsPublishSubject">Subject <span class="form-label-hint">(optional)</span></label>
+              <input class="form-input" id="snsPublishSubject" placeholder="Notification subject" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="snsPublishBody">Message Body</label>
+              <textarea class="form-textarea form-textarea-lg" id="snsPublishBody" placeholder='{"key": "value"}'></textarea>
+            </div>
+            <div class="form-actions">
+              <div class="form-actions-left">
+                <button class="btn btn-secondary btn-sm" data-action="format-json" data-target="snsPublishBody">Format JSON</button>
+              </div>
+              <button class="btn btn-primary" data-action="sns-publish-message">Publish Message</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="page-secrets-manager" class="tab-panel">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Secrets Manager</div>
+            <div class="page-subtitle">Store and retrieve application secrets</div>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-primary" data-action="open-modal" data-modal="modal-create-secret">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+              Create Secret
+            </button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+              All Secrets
+            </div>
+            <div class="search-wrap search-wrap-sm">
+              <span class="search-icon icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+              <input class="form-input" type="text" placeholder="Filter secrets..." id="secretFilter" aria-label="Filter secrets" />
+            </div>
+          </div>
+          <div id="secretsList" class="data-panel"></div>
+        </div>
+      </div>
+
+      <div id="page-secrets-parameters" class="tab-panel">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Parameter Store</div>
+            <div class="page-subtitle">Manage SSM parameters and configuration values</div>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-primary" data-action="open-modal" data-modal="modal-create-parameter">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+              Create Parameter
+            </button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+              All Parameters
+            </div>
+            <div class="search-wrap search-wrap-sm">
+              <span class="search-icon icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+              <input class="form-input" type="text" placeholder="Filter parameters..." id="parameterFilter" aria-label="Filter parameters" />
+            </div>
+          </div>
+          <div id="parametersList" class="data-panel"></div>
+        </div>
+      </div>
+
+      <div id="page-lambda-functions" class="tab-panel">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Lambda Functions</div>
+            <div class="page-subtitle">Browse deployed serverless functions</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+              All Functions
+            </div>
+            <div class="search-wrap search-wrap-sm">
+              <span class="search-icon icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+              <input class="form-input" type="text" placeholder="Filter functions..." id="functionFilter" aria-label="Filter functions" />
+            </div>
+          </div>
+          <div id="functionsTableWrap" class="data-panel"></div>
+        </div>
+      </div>
+
+      <div id="page-lambda-invoke" class="tab-panel">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Invoke Function</div>
+            <div class="page-subtitle">Test Lambda functions with a JSON payload</div>
+          </div>
+        </div>
+        <div class="card card-narrow">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></span>
+              Invocation Editor
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label" for="lambdaInvokeSelect">Function</label>
+              <select class="form-select" id="lambdaInvokeSelect">
+                <option value="">— select function —</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="lambdaInvokePayload">Payload <span class="form-label-hint">(JSON)</span></label>
+              <textarea class="form-textarea form-textarea-lg" id="lambdaInvokePayload" placeholder='{"key": "value"}'></textarea>
+            </div>
+            <div class="form-actions">
+              <div class="form-actions-left">
+                <button class="btn btn-secondary btn-sm" data-action="format-json" data-target="lambdaInvokePayload">Format JSON</button>
+                <button class="btn btn-secondary btn-sm" data-action="view-lambda-logs">View Logs</button>
+              </div>
+              <button class="btn btn-primary" data-action="invoke-lambda">Invoke</button>
+            </div>
+          </div>
+        </div>
+        <div class="card card-narrow hidden" id="lambdaInvokeResultCard">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
+              Response
+            </div>
+          </div>
+          <div class="card-body">
+            <pre class="code-block" id="lambdaInvokeResult"></pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="page-logs-groups" class="tab-panel">
+        <div class="page-header">
+          <div>
+            <div class="page-title">CloudWatch Log Groups</div>
+            <div class="page-subtitle">Browse log groups and streams</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+              All Log Groups
+            </div>
+            <div class="search-wrap search-wrap-sm">
+              <span class="search-icon icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+              <input class="form-input" type="text" placeholder="Filter log groups..." id="logGroupFilter" aria-label="Filter log groups" />
+            </div>
+          </div>
+          <div id="logGroupsTableWrap" class="data-panel"></div>
+        </div>
+      </div>
+
+      <div id="page-logs-viewer" class="tab-panel">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Log Viewer</div>
+            <div class="page-subtitle">Tail CloudWatch log events in real time</div>
+          </div>
+          <div class="header-actions">
+            <label class="form-checkbox">
+              <input type="checkbox" id="logAutoRefresh" />
+              Auto-refresh (2s)
+            </label>
+            <button class="btn btn-secondary" data-action="refresh-logs">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span>
+              Refresh
+            </button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+              Log Events
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="logGroupSelect">Log Group</label>
+                <select class="form-select" id="logGroupSelect">
+                  <option value="">— select log group —</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="logStreamSelect">Log Stream</label>
+                <select class="form-select" id="logStreamSelect">
+                  <option value="">— select stream —</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="logFilterPattern">Filter Pattern <span class="form-label-hint">(optional)</span></label>
+              <input class="form-input" id="logFilterPattern" placeholder="ERROR" />
+            </div>
+          </div>
+          <div id="logViewerContent" class="data-panel"></div>
+        </div>
+      </div>
+
+      <div id="page-eventbridge-rules" class="tab-panel">
+        <div class="page-header">
+          <div>
+            <div class="page-title">EventBridge Rules</div>
+            <div class="page-subtitle">Manage event rules and targets</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></span>
+              All Rules
+            </div>
+            <div class="search-wrap search-wrap-sm">
+              <span class="search-icon icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+              <input class="form-input" type="text" placeholder="Filter rules..." id="ruleFilter" aria-label="Filter rules" />
+            </div>
+          </div>
+          <div id="rulesTableWrap" class="data-panel"></div>
+        </div>
+      </div>
+
+      <div id="page-eventbridge-send" class="tab-panel">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Send Event</div>
+            <div class="page-subtitle">Put custom events onto the default event bus</div>
+          </div>
+        </div>
+        <div class="card card-narrow">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span>
+              Event Editor
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="sendEventSource">Source</label>
+                <input class="form-input" id="sendEventSource" placeholder="my.app" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="sendEventDetailType">Detail Type</label>
+                <input class="form-input" id="sendEventDetailType" placeholder="MyEvent" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sendEventDetail">Detail <span class="form-label-hint">(JSON)</span></label>
+              <textarea class="form-textarea form-textarea-lg" id="sendEventDetail" placeholder='{"key": "value"}'></textarea>
+            </div>
+            <div class="form-actions">
+              <div class="form-actions-left">
+                <button class="btn btn-secondary btn-sm" data-action="format-json" data-target="sendEventDetail">Format JSON</button>
+              </div>
+              <button class="btn btn-primary" data-action="send-event">Send Event</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="page-sfn-machines" class="tab-panel">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Step Functions</div>
+            <div class="page-subtitle">Browse state machines</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
+              State Machines
+            </div>
+            <div class="search-wrap search-wrap-sm">
+              <span class="search-icon icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+              <input class="form-input" type="text" placeholder="Filter machines..." id="machineFilter" aria-label="Filter state machines" />
+            </div>
+          </div>
+          <div id="machinesTableWrap" class="data-panel"></div>
+        </div>
+      </div>
+
+      <div id="page-sfn-executions" class="tab-panel">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Executions</div>
+            <div class="page-subtitle">Start and inspect state machine executions</div>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-primary" data-action="open-modal" data-modal="modal-sfn-start">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></span>
+              Start Execution
+            </button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
+              Executions
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <select class="form-select" id="sfnMachineSelect" aria-label="Select state machine">
+                <option value="">— select state machine —</option>
+              </select>
+            </div>
+          </div>
+          <div id="executionsTableWrap" class="data-panel"></div>
+        </div>
+        <div class="card hidden" id="sfnHistoryCard">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+              Execution History
+            </div>
+          </div>
+          <div id="executionHistoryWrap" class="data-panel"></div>
         </div>
       </div>
     </main>
@@ -239,6 +852,22 @@
           <input type="checkbox" id="newQueueFifo" />
           FIFO Queue (ordered, exactly-once delivery)
         </label>
+      </div>
+      <div class="form-group">
+        <label class="form-checkbox">
+          <input type="checkbox" id="newQueueDlq" />
+          Configure dead-letter queue (DLQ)
+        </label>
+      </div>
+      <div class="form-group hidden" id="dlqOptionsGroup">
+        <label class="form-label" for="newQueueDlqSelect">Dead-Letter Queue</label>
+        <select class="form-select" id="newQueueDlqSelect">
+          <option value="">— select queue —</option>
+        </select>
+      </div>
+      <div class="form-group hidden" id="dlqMaxReceiveGroup">
+        <label class="form-label" for="newQueueMaxReceiveCount">Max Receive Count</label>
+        <input class="form-input" type="number" id="newQueueMaxReceiveCount" min="1" value="3" />
       </div>
     </div>
     <div class="modal-footer">
@@ -295,9 +924,34 @@
         <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
       </button>
     </div>
-    <div class="modal-body" id="peekBody"></div>
+    <div class="modal-body">
+      <div id="peekControls">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="peekVisibilityTimeout">Visibility Timeout <span class="form-label-hint">(seconds, 0 = default)</span></label>
+            <input class="form-input" type="number" id="peekVisibilityTimeout" min="0" value="0" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Receive Mode</label>
+            <div class="form-actions-left">
+              <button type="button" class="btn btn-sm btn-secondary active" id="peekModePeek" data-action="set-peek-mode" data-mode="peek">Peek</button>
+              <button type="button" class="btn btn-sm btn-secondary" id="peekModeConsume" data-action="set-peek-mode" data-mode="consume">Consume</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-actions hidden" id="peekRedriveArea">
+          <button type="button" class="btn btn-warning btn-sm" data-action="redrive-messages">
+            <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span>
+            Redrive Messages
+          </button>
+        </div>
+        <hr class="divider" />
+      </div>
+      <div id="peekBody"></div>
+    </div>
     <div class="modal-footer">
       <button class="btn btn-secondary" data-action="close-modal" data-modal="modal-peek">Close</button>
+      <button class="btn btn-primary" data-action="fetch-messages">Load Messages</button>
     </div>
   </div>
 </div>
@@ -312,6 +966,8 @@
       </button>
     </div>
     <div class="modal-body">
+      <div id="viewFileMeta" class="msg-meta"></div>
+      <div id="viewFilePresign"></div>
       <pre class="code-block" id="viewFileContent"></pre>
     </div>
     <div class="modal-footer">
@@ -351,8 +1007,353 @@
   </div>
 </div>
 
+<!-- Create Table -->
+<div class="modal-overlay" id="modal-create-table" role="dialog" aria-modal="true" aria-labelledby="createTableTitle" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="createTableTitle">Create Table</div>
+      <button type="button" class="modal-close" data-action="close-modal" data-modal="modal-create-table" aria-label="Close">
+        <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label" for="newTableName">Table Name</label>
+        <input class="form-input" id="newTableName" placeholder="my-table" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="newTablePartitionKey">Partition Key</label>
+          <input class="form-input" id="newTablePartitionKey" placeholder="pk" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="newTablePartitionKeyType">Type</label>
+          <select class="form-select" id="newTablePartitionKeyType">
+            <option value="S">String (S)</option>
+            <option value="N">Number (N)</option>
+            <option value="B">Binary (B)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="newTableSortKey">Sort Key <span class="form-label-hint">(optional)</span></label>
+          <input class="form-input" id="newTableSortKey" placeholder="sk" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="newTableSortKeyType">Type</label>
+          <select class="form-select" id="newTableSortKeyType">
+            <option value="S">String (S)</option>
+            <option value="N">Number (N)</option>
+            <option value="B">Binary (B)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-action="close-modal" data-modal="modal-create-table">Cancel</button>
+      <button class="btn btn-primary" data-action="create-table">Create Table</button>
+    </div>
+  </div>
+</div>
+
+<!-- Create Topic -->
+<div class="modal-overlay" id="modal-create-topic" role="dialog" aria-modal="true" aria-labelledby="createTopicTitle" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="createTopicTitle">Create Topic</div>
+      <button type="button" class="modal-close" data-action="close-modal" data-modal="modal-create-topic" aria-label="Close">
+        <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label" for="newTopicName">Topic Name</label>
+        <input class="form-input" id="newTopicName" placeholder="my-topic" />
+      </div>
+      <div class="form-group">
+        <label class="form-checkbox">
+          <input type="checkbox" id="newTopicFifo" />
+          FIFO Topic (ordered delivery)
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-action="close-modal" data-modal="modal-create-topic">Cancel</button>
+      <button class="btn btn-primary" data-action="create-topic">Create Topic</button>
+    </div>
+  </div>
+</div>
+
+<!-- Subscribe SNS -->
+<div class="modal-overlay" id="modal-subscribe-sns" role="dialog" aria-modal="true" aria-labelledby="subscribeSnsTitle" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="subscribeSnsTitle">Subscribe to Topic</div>
+      <button type="button" class="modal-close" data-action="close-modal" data-modal="modal-subscribe-sns" aria-label="Close">
+        <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label" for="snsSubscribeProtocol">Protocol</label>
+        <select class="form-select" id="snsSubscribeProtocol">
+          <option value="sqs">SQS</option>
+          <option value="email">Email</option>
+          <option value="lambda">Lambda</option>
+          <option value="http">HTTP</option>
+          <option value="https">HTTPS</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="snsSubscribeEndpoint">Endpoint</label>
+        <select class="form-select" id="snsSubscribeEndpoint">
+          <option value="">— select SQS queue —</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-action="close-modal" data-modal="modal-subscribe-sns">Cancel</button>
+      <button class="btn btn-primary" data-action="subscribe-sns">Subscribe</button>
+    </div>
+  </div>
+</div>
+
+<!-- Create Secret -->
+<div class="modal-overlay" id="modal-create-secret" role="dialog" aria-modal="true" aria-labelledby="createSecretTitle" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="createSecretTitle">Create Secret</div>
+      <button type="button" class="modal-close" data-action="close-modal" data-modal="modal-create-secret" aria-label="Close">
+        <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label" for="newSecretName">Secret Name</label>
+        <input class="form-input" id="newSecretName" placeholder="my-secret" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="newSecretValue">Secret Value</label>
+        <textarea class="form-textarea" id="newSecretValue" placeholder="secret value"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-action="close-modal" data-modal="modal-create-secret">Cancel</button>
+      <button class="btn btn-primary" data-action="create-secret">Create Secret</button>
+    </div>
+  </div>
+</div>
+
+<!-- Create Parameter -->
+<div class="modal-overlay" id="modal-create-parameter" role="dialog" aria-modal="true" aria-labelledby="createParameterTitle" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="createParameterTitle">Create Parameter</div>
+      <button type="button" class="modal-close" data-action="close-modal" data-modal="modal-create-parameter" aria-label="Close">
+        <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label" for="newParameterName">Parameter Name</label>
+        <input class="form-input" id="newParameterName" placeholder="/my-app/config/key" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="newParameterValue">Value</label>
+        <textarea class="form-textarea" id="newParameterValue" placeholder="parameter value"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="newParameterType">Type</label>
+        <select class="form-select" id="newParameterType">
+          <option value="String">String</option>
+          <option value="SecureString">SecureString</option>
+          <option value="StringList">StringList</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-action="close-modal" data-modal="modal-create-parameter">Cancel</button>
+      <button class="btn btn-primary" data-action="create-parameter">Create Parameter</button>
+    </div>
+  </div>
+</div>
+
+<!-- Copy Object -->
+<div class="modal-overlay" id="modal-copy-object" role="dialog" aria-modal="true" aria-labelledby="copyObjectTitle" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="copyObjectTitle">Copy Object</div>
+      <button type="button" class="modal-close" data-action="close-modal" data-modal="modal-copy-object" aria-label="Close">
+        <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label" for="copyDestBucket">Destination Bucket</label>
+        <select class="form-select" id="copyDestBucket">
+          <option value="">— select bucket —</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="copyDestKey">Destination Key</label>
+        <input class="form-input" id="copyDestKey" placeholder="path/to/object" />
+      </div>
+      <div class="form-group">
+        <label class="form-checkbox">
+          <input type="checkbox" id="copyMoveCheckbox" />
+          Move (delete source after copy)
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-action="close-modal" data-modal="modal-copy-object">Cancel</button>
+      <button class="btn btn-primary" data-action="copy-object">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- Create Folder -->
+<div class="modal-overlay" id="modal-create-folder" role="dialog" aria-modal="true" aria-labelledby="createFolderTitle" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="createFolderTitle">New Folder</div>
+      <button type="button" class="modal-close" data-action="close-modal" data-modal="modal-create-folder" aria-label="Close">
+        <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label" for="newFolderName">Folder Name</label>
+        <input class="form-input" id="newFolderName" placeholder="my-folder" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-action="close-modal" data-modal="modal-create-folder">Cancel</button>
+      <button class="btn btn-primary" data-action="create-folder">Create Folder</button>
+    </div>
+  </div>
+</div>
+
+<!-- Start SFN Execution -->
+<div class="modal-overlay" id="modal-sfn-start" role="dialog" aria-modal="true" aria-labelledby="sfnStartTitle" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="sfnStartTitle">Start Execution</div>
+      <button type="button" class="modal-close" data-action="close-modal" data-modal="modal-sfn-start" aria-label="Close">
+        <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label" for="sfnStartMachineSelect">State Machine</label>
+        <select class="form-select" id="sfnStartMachineSelect">
+          <option value="">— select state machine —</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="sfnStartInput">Input <span class="form-label-hint">(JSON)</span></label>
+        <textarea class="form-textarea form-textarea-lg" id="sfnStartInput" placeholder='{"key": "value"}'></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-action="close-modal" data-modal="modal-sfn-start">Cancel</button>
+      <button class="btn btn-primary" data-action="start-sfn-execution">Start Execution</button>
+    </div>
+  </div>
+</div>
+
+<!-- Send Event -->
+<div class="modal-overlay" id="modal-send-event" role="dialog" aria-modal="true" aria-labelledby="sendEventTitle" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="sendEventTitle">Send Event</div>
+      <button type="button" class="modal-close" data-action="close-modal" data-modal="modal-send-event" aria-label="Close">
+        <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label" for="eventSource">Source</label>
+        <input class="form-input" id="eventSource" placeholder="my.app" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="eventDetailType">Detail Type</label>
+        <input class="form-input" id="eventDetailType" placeholder="MyEvent" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="eventDetailJson">Detail <span class="form-label-hint">(JSON)</span></label>
+        <textarea class="form-textarea form-textarea-lg" id="eventDetailJson" placeholder='{"key": "value"}'></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-action="close-modal" data-modal="modal-send-event">Cancel</button>
+      <button class="btn btn-primary" data-action="send-event-modal">Send Event</button>
+    </div>
+  </div>
+</div>
+
+<!-- Put DynamoDB Item -->
+<div class="modal-overlay" id="modal-put-item" role="dialog" aria-modal="true" aria-labelledby="putItemTitle" aria-hidden="true">
+  <div class="modal modal-wide">
+    <div class="modal-header">
+      <div class="modal-title" id="putItemTitle">Put Item</div>
+      <button type="button" class="modal-close" data-action="close-modal" data-modal="modal-put-item" aria-label="Close">
+        <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <textarea class="form-textarea form-textarea-lg" id="dynamoItemJson" placeholder='{"pk": "value"}'></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-action="close-modal" data-modal="modal-put-item">Cancel</button>
+      <button class="btn btn-primary" data-action="put-item">Save Item</button>
+    </div>
+  </div>
+</div>
+
+<!-- View Secret -->
+<div class="modal-overlay" id="modal-view-secret" role="dialog" aria-modal="true" aria-labelledby="secretViewTitle" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="secretViewTitle">Secret</div>
+      <button type="button" class="modal-close" data-action="close-modal" data-modal="modal-view-secret" aria-label="Close">
+        <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <pre class="code-block" id="secretViewValue" data-revealed="0">••••••••••••</pre>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-action="toggle-secret-reveal">Reveal</button>
+      <button class="btn btn-secondary" data-action="copy-secret-value">Copy</button>
+      <button class="btn btn-secondary" data-action="close-modal" data-modal="modal-view-secret">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- View Parameter -->
+<div class="modal-overlay" id="modal-view-parameter" role="dialog" aria-modal="true" aria-labelledby="paramViewTitle" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="paramViewTitle">Parameter</div>
+      <button type="button" class="modal-close" data-action="close-modal" data-modal="modal-view-parameter" aria-label="Close">
+        <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <pre class="code-block" id="paramViewValue" data-revealed="0">••••••••••••</pre>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-action="toggle-param-reveal">Reveal</button>
+      <button class="btn btn-secondary" data-action="copy-param-value">Copy</button>
+      <button class="btn btn-secondary" data-action="close-modal" data-modal="modal-view-parameter">Close</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
-<script src="/app.js"></script>
+<script type="module" src="/js/main.js"></script>
 </body>
 </html>

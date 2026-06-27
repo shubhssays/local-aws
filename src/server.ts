@@ -4,8 +4,16 @@ import multipart from '@fastify/multipart';
 import staticPlugin from '@fastify/static';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { healthRoutes } from './routes/health.js';
 import { sqsRoutes } from './routes/sqs.js';
 import { s3Routes } from './routes/s3.js';
+import { dynamodbRoutes } from './routes/dynamodb.js';
+import { snsRoutes } from './routes/sns.js';
+import { secretsRoutes } from './routes/secrets.js';
+import { lambdaRoutes } from './routes/lambda.js';
+import { logsRoutes } from './routes/logs.js';
+import { eventbridgeRoutes } from './routes/eventbridge.js';
+import { stepfunctionsRoutes } from './routes/stepfunctions.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -19,9 +27,8 @@ const server = Fastify({
 });
 
 await server.register(cors, { origin: true });
-await server.register(multipart, { limits: { fileSize: 100 * 1024 * 1024 } }); // 100MB
+await server.register(multipart, { limits: { fileSize: 100 * 1024 * 1024 } });
 
-// Serve static frontend (disable browser caching for dev assets)
 await server.register(staticPlugin, {
   root: join(__dirname, '..', 'public'),
   prefix: '/',
@@ -35,9 +42,16 @@ await server.register(staticPlugin, {
   },
 });
 
-// API routes
+await server.register(healthRoutes, { prefix: '/api/health' });
 await server.register(sqsRoutes, { prefix: '/api/sqs' });
 await server.register(s3Routes, { prefix: '/api/s3' });
+await server.register(dynamodbRoutes, { prefix: '/api/dynamodb' });
+await server.register(snsRoutes, { prefix: '/api/sns' });
+await server.register(secretsRoutes, { prefix: '/api/secrets' });
+await server.register(lambdaRoutes, { prefix: '/api/lambda' });
+await server.register(logsRoutes, { prefix: '/api/logs' });
+await server.register(eventbridgeRoutes, { prefix: '/api/eventbridge' });
+await server.register(stepfunctionsRoutes, { prefix: '/api/stepfunctions' });
 
 server.addHook('onSend', async (request, reply, payload) => {
   if (request.url.startsWith('/api/')) {
