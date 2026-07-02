@@ -234,6 +234,280 @@ function isBinaryFile(filename) {
   return BINARY_EXTENSIONS.has(ext);
 }
 
+function isImageFile(filename, contentType) {
+  const ext = filename.split('.').pop()?.toLowerCase() ?? '';
+  if (['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'ico', 'bmp'].includes(ext)) return true;
+  return !!contentType?.startsWith('image/');
+}
+
+function formatDateTime(value) {
+  if (!value) return '—';
+  return new Date(value).toLocaleString(undefined, {
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+  });
+}
+
+function renderDetailField(label, value, { copyable = false, mono = true, full = false } = {}) {
+  const display = value == null || value === '' ? '—' : String(value);
+  const valueClass = mono ? 'detail-value monospace' : 'detail-value';
+  const copyBtn = copyable && display !== '—'
+    ? `<button type="button" class="detail-copy-btn" data-action="copy-field" data-value="${escAttr(display)}" title="Copy">${icon('copy', 'icon icon-sm')}</button>`
+    : '';
+  return `
+    <div class="detail-field${full ? ' detail-field-full' : ''}">
+      <div class="detail-label">${escHtml(label)}</div>
+      <div class="detail-value-wrap">
+        <div class="${valueClass}" title="${escAttr(display)}">${escHtml(display)}</div>
+        ${copyBtn}
+      </div>
+    </div>`;
+}
+
+function renderDetailSection(title, fieldsHtml) {
+  return `
+    <section class="detail-section">
+      <div class="detail-section-title">${escHtml(title)}</div>
+      <div class="detail-grid">${fieldsHtml}</div>
+    </section>`;
+}
+
+function renderObjectInspectorShell(loading = false, visible = false) {
+  return `
+    <div class="object-inspector${visible ? '' : ' hidden'}" id="objectInspector">
+      <div class="object-inspector-header">
+        <div class="object-inspector-title-wrap">
+          <div class="object-inspector-icon">${icon('file', 'icon')}</div>
+          <div>
+            <div class="object-inspector-title" id="objectInspectorTitle">Object Details</div>
+            <div class="object-inspector-path monospace" id="objectInspectorPath"></div>
+          </div>
+        </div>
+        <div class="object-inspector-toolbar" id="objectInspectorToolbar"></div>
+        <button type="button" class="object-inspector-close" data-action="close-object-inspector" title="Close">${icon('close', 'icon icon-sm')}</button>
+      </div>
+      <div class="object-inspector-tabs" id="objectInspectorTabs"></div>
+      <div class="object-inspector-body" id="objectInspectorBody">
+        ${loading ? '<div class="loader"></div>' : ''}
+      </div>
+    </div>`;
+}
+
+function renderObjectToolbar(key, filename) {
+  const bucket = state.currentBucket;
+  const downloadHref = `/api/s3/buckets/${encodeURIComponent(bucket)}/objects/download?key=${encodeURIComponent(key)}`;
+  return `
+    <button type="button" class="btn btn-secondary btn-sm" data-action="object-preview" data-key="${escAttr(key)}" data-filename="${escAttr(filename)}">${icon('eye', 'icon icon-sm')} Preview</button>
+    <a class="btn btn-secondary btn-sm" href="${escAttr(downloadHref)}" download="${escAttr(filename)}">${icon('download', 'icon icon-sm')} Download</a>
+    <button type="button" class="btn btn-secondary btn-sm" data-action="open-modal" data-modal="modal-upload">${icon('upload', 'icon icon-sm')} Upload</button>
+    <button type="button" class="btn btn-danger btn-sm" data-action="delete-object" data-key="${escAttr(key)}" data-filename="${escAttr(filename)}">${icon('trash', 'icon icon-sm')} Delete</button>
+    <button type="button" class="btn btn-secondary btn-sm" data-action="open-rename-object" data-key="${escAttr(key)}">${icon('edit', 'icon icon-sm')} Rename</button>
+    <button type="button" class="btn btn-secondary btn-sm" data-action="open-copy-object" data-key="${escAttr(key)}" data-filename="${escAttr(filename)}">${icon('copy', 'icon icon-sm')} Copy</button>
+    <button type="button" class="btn btn-secondary btn-sm" data-action="open-copy-object" data-key="${escAttr(key)}" data-filename="${escAttr(filename)}" data-move="1">${icon('layers', 'icon icon-sm')} Move</button>`;
+}
+
+function renderObjectTabs(activeTab) {
+  const tabs = [
+    ['overview', 'Overview'],
+    ['properties', 'Properties'],
+    ['metadata', 'User Metadata'],
+    ['tags', 'Tags'],
+    ['preview', 'Preview'],
+  ];
+  return tabs.map(([id, label]) => `
+    <button type="button" class="object-tab${activeTab === id ? ' active' : ''}" data-action="object-tab" data-tab="${id}">${label}</button>
+  `).join('');
+}
+
+function renderObjectTabContent(detail, tab, previewContent) {
+  const p = detail.properties ?? {};
+  const meta = p.metadata ?? {};
+  const tags = detail.tags ?? {};
+
+  if (tab === 'overview') {
+    return `
+      ${renderDetailSection('General', [
+        renderDetailField('File name', detail.filename),
+        renderDetailField('Extension', detail.extension ? `.${detail.extension}` : '—'),
+        renderDetailField('Folder path', detail.folderPath || '/'),
+        renderDetailField('Last modified', formatDateTime(p.lastModified)),
+        renderDetailField('Size', formatBytes(p.contentLength)),
+      ].join(''))}
+      ${renderDetailSection('Object identifiers', [
+        renderDetailField('Bucket', detail.bucket),
+        renderDetailField('Key', detail.key, { copyable: true, full: true }),
+        renderDetailField('ARN', detail.arn, { copyable: true, full: true }),
+        renderDetailField('S3 URI', detail.s3Uri, { copyable: true, full: true }),
+        renderDetailField('Region', detail.region),
+      ].join(''))}
+      ${renderDetailSection('Endpoints', [
+        renderDetailField('Path-style URL', detail.pathStyleUrl, { copyable: true, full: true }),
+        renderDetailField('Virtual-hosted URL', detail.virtualHostUrl, { copyable: true, full: true }),
+        renderDetailField('Presigned URL', detail.presignedUrl, { copyable: true, full: true }),
+      ].join(''))}`;
+  }
+
+  if (tab === 'properties') {
+    const fields = [
+      renderDetailField('Content-Type', p.contentType),
+      renderDetailField('Content-Length', p.contentLength != null ? `${p.contentLength} bytes (${formatBytes(p.contentLength)})` : '—'),
+      renderDetailField('ETag', p.etag, { copyable: true }),
+      renderDetailField('Storage Class', p.storageClass),
+      renderDetailField('Version ID', p.versionId, { copyable: true }),
+      renderDetailField('Server-side encryption', p.serverSideEncryption),
+      renderDetailField('SSE customer algorithm', p.sseCustomerAlgorithm),
+      renderDetailField('Cache-Control', p.cacheControl),
+      renderDetailField('Content-Disposition', p.contentDisposition),
+      renderDetailField('Content-Encoding', p.contentEncoding),
+      renderDetailField('Content-Language', p.contentLanguage),
+      renderDetailField('Expires', formatDateTime(p.expires)),
+      renderDetailField('Website redirect', p.websiteRedirectLocation, { full: true }),
+      renderDetailField('Archive status', p.archiveStatus),
+      renderDetailField('Object lock mode', p.objectLockMode),
+      renderDetailField('Object lock retain until', formatDateTime(p.objectLockRetainUntilDate)),
+      renderDetailField('Legal hold', p.objectLockLegalHoldStatus),
+    ].join('');
+    return renderDetailSection('System properties', fields);
+  }
+
+  if (tab === 'metadata') {
+    const entries = Object.entries(meta);
+    if (!entries.length) {
+      return `<div class="empty-state compact"><div class="empty-sub">No user-defined metadata on this object</div></div>`;
+    }
+    return renderDetailSection('User-defined metadata', entries.map(([k, v]) =>
+      renderDetailField(k, v, { copyable: true, full: true })
+    ).join(''));
+  }
+
+  if (tab === 'tags') {
+    const entries = Object.entries(tags);
+    if (!entries.length) {
+      return `<div class="empty-state compact"><div class="empty-sub">No tags on this object</div></div>`;
+    }
+    return `
+      <div class="tag-grid">
+        ${entries.map(([k, v]) => `
+          <div class="tag-chip">
+            <span class="tag-chip-key">${escHtml(k)}</span>
+            <span class="tag-chip-sep">=</span>
+            <span class="tag-chip-value">${escHtml(v)}</span>
+            <button type="button" class="detail-copy-btn" data-action="copy-field" data-value="${escAttr(`${k}=${v}`)}" title="Copy">${icon('copy', 'icon icon-sm')}</button>
+          </div>`).join('')}
+      </div>`;
+  }
+
+  if (tab === 'preview') {
+    if (previewContent?.image) {
+      return `<div class="object-preview-image"><img src="${escAttr(previewContent.image)}" alt="${escAttr(detail.filename)}" /></div>`;
+    }
+    if (previewContent?.binary) {
+      return `<div class="empty-state compact"><div class="empty-sub">Binary file (${escHtml(previewContent.contentType ?? 'unknown')}) — use Download to save.</div></div>`;
+    }
+    if (previewContent?.content != null) {
+      return `<pre class="code-block object-preview-code">${escHtml(previewContent.content)}</pre>`;
+    }
+    return '<div class="loader"></div>';
+  }
+
+  return '';
+}
+
+async function loadObjectPreview(key, filename, detail) {
+  const contentType = detail?.properties?.contentType;
+  if (isImageFile(filename, contentType)) {
+    return { image: detail.presignedUrl || detail.downloadUrl, contentType, binary: true };
+  }
+  try {
+    const viewRes = await api('GET', `/s3/buckets/${encodeURIComponent(state.currentBucket)}/objects/view?key=${encodeURIComponent(key)}`);
+    if (viewRes.binary) return { binary: true, contentType: viewRes.contentType };
+    let display = viewRes.content ?? '';
+    if (viewRes.contentType?.includes('json') || filename.endsWith('.json')) {
+      try { display = JSON.stringify(JSON.parse(viewRes.content), null, 2); } catch {}
+    }
+    return { content: display, contentType: viewRes.contentType, binary: false };
+  } catch (e) {
+    return { content: `Error loading preview: ${e.message}`, binary: false };
+  }
+}
+
+async function openObjectDetails(key, filename) {
+  state.currentObjectKey = key;
+  state.objectDetailTab = 'overview';
+  state.objectDetail = null;
+  renderObjects(getFilteredObjects());
+
+  const inspector = document.getElementById('objectInspector');
+  inspector?.classList.remove('hidden');
+  inspector?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  try {
+    const detail = await api('GET', `/s3/buckets/${encodeURIComponent(state.currentBucket)}/objects/details?key=${encodeURIComponent(key)}`);
+    state.objectDetail = detail;
+    document.getElementById('objectInspectorTitle').textContent = detail.filename;
+    document.getElementById('objectInspectorPath').textContent = `${detail.bucket}/${detail.key}`;
+    document.getElementById('objectInspectorToolbar').innerHTML = renderObjectToolbar(key, detail.filename);
+    document.getElementById('objectInspectorTabs').innerHTML = renderObjectTabs('overview');
+    document.getElementById('objectInspectorBody').innerHTML = renderObjectTabContent(detail, 'overview');
+    const iconWrap = document.querySelector('.object-inspector-icon');
+    if (iconWrap) {
+      iconWrap.innerHTML = icon(isImageFile(detail.filename, detail.properties?.contentType) ? 'image' : fileIconName(detail.filename), 'icon');
+    }
+  } catch (e) {
+    document.getElementById('objectInspectorBody').innerHTML = renderError(e.message);
+  }
+}
+
+async function switchObjectTab(tab) {
+  if (!state.currentObjectKey || !state.objectDetail) return;
+  state.objectDetailTab = tab;
+  document.querySelectorAll('.object-tab').forEach((el) => {
+    el.classList.toggle('active', el.dataset.tab === tab);
+  });
+  const body = document.getElementById('objectInspectorBody');
+  if (!body) return;
+
+  if (tab === 'preview') {
+    body.innerHTML = '<div class="loader"></div>';
+    const filename = state.objectDetail.filename;
+    const preview = await loadObjectPreview(state.currentObjectKey, filename, state.objectDetail);
+    body.innerHTML = renderObjectTabContent(state.objectDetail, 'preview', preview);
+    return;
+  }
+
+  body.innerHTML = renderObjectTabContent(state.objectDetail, tab);
+}
+
+function closeObjectInspector() {
+  state.currentObjectKey = null;
+  state.objectDetail = null;
+  state.objectDetailTab = 'overview';
+  document.getElementById('objectInspector')?.classList.add('hidden');
+  renderObjects(getFilteredObjects());
+}
+
+function openRenameModal(key) {
+  state.copyObjectKey = key;
+  document.getElementById('renameObjectKey').value = key;
+  openModal('modal-rename-object');
+}
+
+async function renameObject() {
+  const oldKey = state.copyObjectKey;
+  const newKey = document.getElementById('renameObjectKey')?.value.trim();
+  if (!oldKey || !newKey) return toast('New key is required', 'error');
+  if (oldKey === newKey) return toast('Key unchanged', 'info');
+  try {
+    await api('POST', `/s3/buckets/${encodeURIComponent(state.currentBucket)}/objects/rename`, { oldKey, newKey });
+    closeModal('modal-rename-object');
+    toast('Object renamed', 'success');
+    closeObjectInspector();
+    openBucket(state.currentBucket, state.currentPrefix);
+  } catch (e) {
+    toast(e.message, 'error');
+  }
+}
+
 function renderObjects(items, { filtered = false } = {}) {
   const content = document.getElementById('browserContent');
   if (!content) return;
@@ -268,15 +542,17 @@ function renderObjects(items, { filtered = false } = {}) {
     const modified = item.LastModified ? new Date(item.LastModified).toLocaleString() : '—';
     const ext = filename.split('.').pop()?.toLowerCase();
     const binary = isBinaryFile(filename);
-    return `<tr>
+    const selected = state.currentObjectKey === key;
+    return `<tr class="row-object${selected ? ' row-selected' : ''}" data-action="object-details" data-key="${escAttr(key)}" data-filename="${escAttr(filename)}">
       <td><span class="file-icon">${icon(fileIconName(filename), 'icon icon-sm')}</span> <span class="truncate" title="${escAttr(key)}">${escHtml(filename)}</span></td>
       <td><span class="badge badge-muted">.${escHtml(ext ?? 'file')}</span></td>
       <td>${size}</td>
       <td class="text-muted-sm">${modified}</td>
       <td class="td-actions">
         <div class="action-row">
-          ${binary ? '' : `<button class="btn btn-secondary btn-sm btn-icon" data-action="view-file" data-key="${escAttr(key)}" data-filename="${escAttr(filename)}" title="View">${icon('eye', 'icon icon-sm')}</button>`}
-          <button class="btn btn-secondary btn-sm btn-icon" data-action="copy-object" data-key="${escAttr(key)}" data-filename="${escAttr(filename)}" title="Copy/Move">${icon('copy', 'icon icon-sm')}</button>
+          <button class="btn btn-secondary btn-sm btn-icon" data-action="object-details" data-key="${escAttr(key)}" data-filename="${escAttr(filename)}" title="Details">${icon('info', 'icon icon-sm')}</button>
+          ${binary ? '' : `<button class="btn btn-secondary btn-sm btn-icon" data-action="object-preview" data-key="${escAttr(key)}" data-filename="${escAttr(filename)}" title="Preview">${icon('eye', 'icon icon-sm')}</button>`}
+          <button class="btn btn-secondary btn-sm btn-icon" data-action="open-copy-object" data-key="${escAttr(key)}" data-filename="${escAttr(filename)}" title="Copy/Move">${icon('copy', 'icon icon-sm')}</button>
           <a class="btn btn-secondary btn-sm btn-icon" href="/api/s3/buckets/${encodeURIComponent(state.currentBucket)}/objects/download?key=${encodeURIComponent(key)}" download="${escAttr(filename)}" title="Download">${icon('download', 'icon icon-sm')}</a>
           <button class="btn btn-danger btn-sm btn-icon" data-action="delete-object" data-key="${escAttr(key)}" data-filename="${escAttr(filename)}" title="Delete">${icon('close', 'icon icon-sm')}</button>
         </div>
@@ -288,13 +564,32 @@ function renderObjects(items, { filtered = false } = {}) {
     ? `<div class="load-more-wrap"><button class="btn btn-secondary" data-action="load-more-objects">Load More</button></div>`
     : '';
 
+  const inspector = renderObjectInspectorShell(
+    !!state.currentObjectKey && !state.objectDetail,
+    !!state.currentObjectKey
+  );
+
   content.innerHTML = `
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Name</th><th>Type</th><th>Size</th><th>Modified</th><th class="text-right">Actions</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>${loadMore}`;
+    <div class="browser-layout">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Type</th><th>Size</th><th>Modified</th><th class="text-right">Actions</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+      ${loadMore}
+      ${inspector}
+    </div>`;
+
+  if (state.currentObjectKey && state.objectDetail) {
+    const filename = state.objectDetail.filename;
+    document.getElementById('objectInspector')?.classList.remove('hidden');
+    document.getElementById('objectInspectorTitle').textContent = filename;
+    document.getElementById('objectInspectorPath').textContent = `${state.currentBucket}/${state.currentObjectKey}`;
+    document.getElementById('objectInspectorToolbar').innerHTML = renderObjectToolbar(state.currentObjectKey, filename);
+    document.getElementById('objectInspectorTabs').innerHTML = renderObjectTabs(state.objectDetailTab);
+    document.getElementById('objectInspectorBody').innerHTML = renderObjectTabContent(state.objectDetail, state.objectDetailTab);
+  }
 }
 
 function filterFiles() {
@@ -303,61 +598,16 @@ function filterFiles() {
   });
 }
 
-async function viewFile(key, filename) {
-  document.getElementById('viewFileTitle').textContent = filename;
-  document.getElementById('viewFileContent').textContent = 'Loading…';
-  document.getElementById('viewFileMeta').innerHTML = '';
-  document.getElementById('viewFilePresign').innerHTML = '';
-  openModal('modal-view-file');
-
-  try {
-    const bucket = state.currentBucket;
-    const [viewRes, metaRes, presignRes] = await Promise.all([
-      api('GET', `/s3/buckets/${encodeURIComponent(bucket)}/objects/view?key=${encodeURIComponent(key)}`),
-      api('GET', `/s3/buckets/${encodeURIComponent(bucket)}/objects/metadata?key=${encodeURIComponent(key)}`),
-      api('GET', `/s3/buckets/${encodeURIComponent(bucket)}/objects/presign?key=${encodeURIComponent(key)}`),
-    ]);
-
-    const metaEl = document.getElementById('viewFileMeta');
-    if (metaEl) {
-      const metaRows = [
-        ['Content-Type', metaRes.contentType ?? '—'],
-        ['Size', formatBytes(metaRes.contentLength)],
-        ['Last Modified', metaRes.lastModified ? new Date(metaRes.lastModified).toLocaleString() : '—'],
-        ['ETag', metaRes.etag ?? '—'],
-        ...Object.entries(metaRes.metadata ?? {}).map(([k, v]) => [`Metadata: ${k}`, v]),
-      ];
-      metaEl.innerHTML = `<div class="msg-meta">${metaRows.map(([k, v]) => `<div><strong>${escHtml(k)}:</strong> ${escHtml(String(v))}</div>`).join('')}</div>`;
-    }
-
-    const presignEl = document.getElementById('viewFilePresign');
-    if (presignEl && presignRes.url) {
-      presignEl.innerHTML = `
-        <div class="form-actions" style="margin-top:12px">
-          <input class="form-input" readonly value="${escAttr(presignRes.url)}" id="presignUrlInput" />
-          <button class="btn btn-secondary btn-sm" data-action="copy-presign-url">${icon('copy', 'icon icon-sm')} Copy URL</button>
-          <a class="btn btn-secondary btn-sm" href="${escAttr(presignRes.url)}" target="_blank" rel="noopener">${icon('link', 'icon icon-sm')} Open</a>
-        </div>`;
-    }
-
-    if (viewRes.binary) {
-      document.getElementById('viewFileContent').textContent =
-        `Binary file (${viewRes.contentType ?? 'unknown type'}) — use Download to save this file.`;
-      return;
-    }
-    let display = viewRes.content ?? '';
-    if (viewRes.contentType?.includes('json') || filename.endsWith('.json')) {
-      try {
-        display = JSON.stringify(JSON.parse(viewRes.content), null, 2);
-      } catch {}
-    }
-    document.getElementById('viewFileContent').textContent = display;
-  } catch (e) {
-    document.getElementById('viewFileContent').textContent = `Error: ${e.message}`;
+async function objectPreview(key, filename) {
+  state.objectDetailTab = 'preview';
+  if (state.currentObjectKey !== key) {
+    await openObjectDetails(key, filename);
   }
+  await switchObjectTab('preview');
+  document.getElementById('objectInspector')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-function openCopyModal(key, filename) {
+function openCopyModal(key, filename, move = false) {
   state.copyObjectKey = key;
   const sel = document.getElementById('copyDestBucket');
   if (sel) {
@@ -365,7 +615,8 @@ function openCopyModal(key, filename) {
       state.buckets.map((b) => `<option value="${escAttr(b.Name)}" ${b.Name === state.currentBucket ? 'selected' : ''}>${escHtml(b.Name)}</option>`).join('');
   }
   document.getElementById('copyDestKey').value = key;
-  document.getElementById('copyMoveCheckbox').checked = false;
+  document.getElementById('copyMoveCheckbox').checked = move;
+  document.getElementById('copyObjectTitle').textContent = move ? 'Move Object' : 'Copy Object';
   openModal('modal-copy-object');
 }
 
@@ -416,6 +667,7 @@ async function deleteObject(key, filename) {
   try {
     await api('DELETE', `/s3/buckets/${encodeURIComponent(state.currentBucket)}/objects`, { key });
     toast(`"${filename}" deleted`, 'success');
+    if (state.currentObjectKey === key) closeObjectInspector();
     openBucket(state.currentBucket, state.currentPrefix);
   } catch (e) {
     toast(e.message, 'error');
@@ -491,24 +743,48 @@ export function handleS3Action(action, el, event) {
       break;
     case 'open-bucket':
       if (event?.target.closest('[data-action="delete-bucket"]')) return;
+      closeObjectInspector();
       openBucket(el.dataset.bucket, el.dataset.prefix || '');
       break;
-    case 'view-file':
-      viewFile(el.dataset.key, el.dataset.filename);
+    case 'object-details':
+      event?.stopPropagation();
+      openObjectDetails(el.dataset.key, el.dataset.filename);
       break;
-    case 'copy-object':
-      openCopyModal(el.dataset.key, el.dataset.filename);
+    case 'object-tab':
+      switchObjectTab(el.dataset.tab);
       break;
-    case 'copy-object':
+    case 'object-preview':
+      event?.stopPropagation();
+      objectPreview(el.dataset.key, el.dataset.filename);
+      break;
+    case 'open-copy-object':
+      event?.stopPropagation();
+      openCopyModal(el.dataset.key, el.dataset.filename, el.dataset.move === '1');
+      break;
+    case 'confirm-copy-object':
       copyObject();
+      break;
+    case 'open-rename-object':
+      event?.stopPropagation();
+      openRenameModal(el.dataset.key);
+      break;
+    case 'confirm-rename-object':
+      renameObject();
+      break;
+    case 'copy-field':
+      copyToClipboard(el.dataset.value ?? '');
       break;
     case 'copy-presign-url':
       copyToClipboard(document.getElementById('presignUrlInput')?.value ?? '');
+      break;
+    case 'close-object-inspector':
+      closeObjectInspector();
       break;
     case 'create-folder':
       createFolder();
       break;
     case 'delete-object':
+      event?.stopPropagation();
       deleteObject(el.dataset.key, el.dataset.filename);
       break;
     case 'load-more-objects':

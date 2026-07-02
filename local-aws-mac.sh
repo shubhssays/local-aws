@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build (first time) and install local-aws to /Applications, then launch from the Dock/Spotlight.
+# Build and install local-aws to /Applications, then launch from the Dock/Spotlight.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -7,24 +7,67 @@ cd "$ROOT"
 
 APP_NAME="local-aws"
 INSTALL_PATH="/Applications/${APP_NAME}.app"
-REINSTALL=false
+OPEN_ONLY=false
 
 for arg in "$@"; do
   case "$arg" in
-    --reinstall) REINSTALL=true ;;
+    --open-only) OPEN_ONLY=true ;;
+    --reinstall) ;; # kept for compatibility; reinstall is now the default
     --help|-h)
-      echo "Usage: ./local-aws-mac.sh [--reinstall]"
-      echo "  Installs local-aws to Applications (builds on first run)."
-      echo "  --reinstall  Rebuild and replace the installed app."
+      echo "Usage: ./local-aws-mac.sh [--open-only]"
+      echo "  Uninstalls any existing app, rebuilds, and installs fresh to Applications."
+      echo "  --open-only  Open the installed app without rebuilding."
       exit 0
+      ;;
+    *)
+      echo "Unknown option: $arg (try --help)" >&2
+      exit 1
       ;;
   esac
 done
 
-if [[ -d "$INSTALL_PATH" && "$REINSTALL" == false ]]; then
+is_installed() {
+  [[ -d "$INSTALL_PATH" ]]
+}
+
+quit_app_if_running() {
+  if pgrep -x "$APP_NAME" >/dev/null 2>&1; then
+    echo "Quitting running ${APP_NAME}..."
+    osascript -e "quit app \"${APP_NAME}\"" 2>/dev/null || true
+    sleep 1
+  fi
+}
+
+uninstall_app() {
+  if ! is_installed; then
+    return 0
+  fi
+
+  echo "Uninstalling existing ${APP_NAME} from Applications..."
+  quit_app_if_running
+  rm -rf "$INSTALL_PATH"
+
+  if is_installed; then
+    echo "Error: failed to remove ${INSTALL_PATH}" >&2
+    exit 1
+  fi
+
+  echo "Uninstalled."
+}
+
+if [[ "$OPEN_ONLY" == true ]]; then
+  if ! is_installed; then
+    echo "Error: ${APP_NAME} is not installed at ${INSTALL_PATH}" >&2
+    echo "Run ./local-aws-mac.sh without --open-only to build and install." >&2
+    exit 1
+  fi
   echo "Opening ${APP_NAME}..."
   open -a "$APP_NAME"
   exit 0
+fi
+
+if is_installed; then
+  uninstall_app
 fi
 
 if ! command -v node >/dev/null 2>&1; then
@@ -45,9 +88,6 @@ if [[ -z "$BUILT_APP" ]]; then
 fi
 
 echo "Installing to ${INSTALL_PATH}..."
-if [[ -d "$INSTALL_PATH" ]]; then
-  rm -rf "$INSTALL_PATH"
-fi
 ditto "$BUILT_APP" "$INSTALL_PATH"
 
 echo ""

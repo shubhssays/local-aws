@@ -10,7 +10,8 @@ import { DescribeLogGroupsCommand } from '@aws-sdk/client-cloudwatch-logs';
 import { ListEventBusesCommand } from '@aws-sdk/client-eventbridge';
 import { ListStateMachinesCommand } from '@aws-sdk/client-sfn';
 import {
-  LOCALSTACK_ENDPOINT,
+  getAwsEndpoint,
+  getActiveAwsProfile,
   s3Client,
   sqsClient,
   dynamoClient,
@@ -52,6 +53,12 @@ export async function healthRoutes(server: FastifyInstance) {
     const services = { s3, sqs, dynamodb, sns, secretsmanager, ssm, lambda, logs, eventbridge, stepfunctions };
     const ok = Object.values(services).some((s) => s.ok);
 
-    return reply.send({ ok, endpoint: LOCALSTACK_ENDPOINT, services });
+    const profile = getActiveAwsProfile();
+    return reply.send({
+      ok,
+      endpoint: getAwsEndpoint(),
+      profile: { id: profile.id, name: profile.name, region: profile.region },
+      services,
+    });
   });
 }

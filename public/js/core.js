@@ -42,6 +42,9 @@ export const state = {
   currentMachine: null,
   executions: [],
   copyObjectKey: null,
+  currentObjectKey: null,
+  objectDetailTab: 'overview',
+  objectDetail: null,
   theme: 'dark',
   loaded: {
     queues: false,
@@ -176,14 +179,19 @@ export function updateStatusFromHealth(data) {
   const connected = Object.values(services).filter((s) => s.ok).length;
   const total = Object.keys(services).length;
 
+  const profileName = data?.profile?.name;
+  const profileLabel = profileName ? `${profileName} · ` : '';
+
   if (data?.ok) {
     dot.className = 'status-dot';
-    text.textContent = total ? `${connected}/${total} services connected` : 'LocalStack Connected';
+    text.textContent = total
+      ? `${profileLabel}${connected}/${total} services connected`
+      : `${profileLabel || ''}LocalStack Connected`.replace(/^ · /, '');
   } else {
     dot.className = 'status-dot error';
     text.textContent = connected > 0
-      ? `${connected}/${total} services connected`
-      : 'LocalStack Unreachable';
+      ? `${profileLabel}${connected}/${total} services connected`
+      : profileName ? `${profileName} unreachable` : 'LocalStack Unreachable';
   }
 }
 

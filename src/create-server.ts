@@ -12,6 +12,13 @@ import { lambdaRoutes } from './routes/lambda.js';
 import { logsRoutes } from './routes/logs.js';
 import { eventbridgeRoutes } from './routes/eventbridge.js';
 import { stepfunctionsRoutes } from './routes/stepfunctions.js';
+import { settingsRoutes, initAwsFromSettings } from './routes/settings.js';
+import {
+  loadSettings,
+  resolveListenOptions,
+  setActiveServerSettings,
+  type AppSettings,
+} from './lib/settings.js';
 
 export type CreateServerOptions = {
   publicDir: string;
@@ -57,6 +64,7 @@ export async function createServer(options: CreateServerOptions): Promise<Fastif
   await server.register(logsRoutes, { prefix: '/api/logs' });
   await server.register(eventbridgeRoutes, { prefix: '/api/eventbridge' });
   await server.register(stepfunctionsRoutes, { prefix: '/api/stepfunctions' });
+  await server.register(settingsRoutes, { prefix: '/api/settings' });
 
   server.addHook('onSend', async (request, reply, payload) => {
     if (request.url.startsWith('/api/')) {
@@ -75,15 +83,26 @@ export type StartServerOptions = CreateServerOptions & {
 };
 
 export async function startServer(options: StartServerOptions) {
+  await initAwsFromSettings();
   const server = await createServer(options);
-  const port = options.port ?? parseInt(process.env.PORT ?? '4580', 10);
-  const host = options.host ?? process.env.HOST ?? '0.0.0.0';
+  const saved = await loadSettings();
+  const listen = resolveListenOptions(saved, {
+    host: options.host,
+    port: options.port,
+  });
 
-  await server.listen({ port, host });
+  await server.listen({ port: listen.port, host: listen.host });
 
   const address = server.server.address();
   const actualPort =
-    typeof address === 'object' && address && 'port' in address ? address.port : port;
+    typeof address === 'object' && address && 'port' in address ? address.port : listen.port;
+  const actualHost =
+    typeof address === 'object' && address && 'address' in address && address.address
+      ? String(address.address)
+      : listen.host;
 
-  return { server, port: actualPort, host };
+  const active: Pick<AppSettings, 'host' | 'port'> = { host: actualHost, port: actualPort };
+  setActiveServerSettings(active);
+
+  return { server, port: actualPort, host: actualHost };
 }

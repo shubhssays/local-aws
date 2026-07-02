@@ -10,9 +10,10 @@ import {
   HeadObjectCommand,
   CopyObjectCommand,
   DeleteObjectsCommand,
+  GetObjectTaggingCommand,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { s3Client } from '../aws.js';
+import { s3Client, getActiveAwsProfile } from '../aws.js';
 import { sendAwsError } from '../lib/aws-error.js';
 
 async function emptyBucket(bucket: string) {
@@ -156,6 +157,86 @@ export async function s3Routes(server: FastifyInstance) {
     }
   );
 
+  server.get<{ Params: { bucket: string }; Querystring: { key: string; expires?: string } }>(
+    '/buckets/:bucket/objects/details',
+    async (req, reply) => {
+      try {
+        const { bucket } = req.params;
+        const { key, expires = '3600' } = req.query;
+        const head = await s3Client.send(new HeadObjectCommand({ Bucket: bucket, Key: key }));
+
+        let tags: Record<string, string> = {};
+        try {
+          const tagRes = await s3Client.send(new GetObjectTaggingCommand({ Bucket: bucket, Key: key }));
+          tags = Object.fromEntries(
+            (tagRes.TagSet ?? [])
+              .filter((tag) => tag.Key)
+              .map((tag) => [tag.Key!, tag.Value ?? ''])
+          );
+        } catch {
+          tags = {};
+        }
+
+        const profile = getActiveAwsProfile();
+        const endpoint = profile.endpoint.replace(/\/$/, '');
+        const filename = key.split('/').pop() ?? key;
+        const extension = filename.includes('.') ? (filename.split('.').pop() ?? '') : '';
+        const folderPath = key.includes('/') ? key.slice(0, key.lastIndexOf('/') + 1) : '';
+        const presignedUrl = await getSignedUrl(
+          s3Client,
+          new GetObjectCommand({ Bucket: bucket, Key: key }),
+          { expiresIn: parseInt(expires, 10) }
+        );
+
+        let endpointHost = endpoint;
+        try {
+          endpointHost = new URL(endpoint).host;
+        } catch {
+          endpointHost = endpoint.replace(/^https?:\/\//, '');
+        }
+
+        return reply.send({
+          bucket,
+          key,
+          filename,
+          extension,
+          folderPath,
+          region: profile.region,
+          arn: `arn:aws:s3:::${bucket}/${key}`,
+          s3Uri: `s3://${bucket}/${key}`,
+          pathStyleUrl: `${endpoint}/${bucket}/${encodeURIComponent(key).replace(/%2F/g, '/')}`,
+          virtualHostUrl: `https://${bucket}.${endpointHost}/${encodeURIComponent(key).replace(/%2F/g, '/')}`,
+          downloadUrl: `/api/s3/buckets/${encodeURIComponent(bucket)}/objects/download?key=${encodeURIComponent(key)}`,
+          presignedUrl,
+          properties: {
+            contentType: head.ContentType ?? null,
+            contentLength: head.ContentLength ?? null,
+            lastModified: head.LastModified ?? null,
+            etag: head.ETag ?? null,
+            storageClass: head.StorageClass ?? null,
+            versionId: head.VersionId ?? null,
+            serverSideEncryption: head.ServerSideEncryption ?? null,
+            sseCustomerAlgorithm: head.SSECustomerAlgorithm ?? null,
+            cacheControl: head.CacheControl ?? null,
+            contentDisposition: head.ContentDisposition ?? null,
+            contentEncoding: head.ContentEncoding ?? null,
+            contentLanguage: head.ContentLanguage ?? null,
+            expires: head.Expires ?? null,
+            websiteRedirectLocation: head.WebsiteRedirectLocation ?? null,
+            archiveStatus: head.ArchiveStatus ?? null,
+            objectLockMode: head.ObjectLockMode ?? null,
+            objectLockRetainUntilDate: head.ObjectLockRetainUntilDate ?? null,
+            objectLockLegalHoldStatus: head.ObjectLockLegalHoldStatus ?? null,
+            metadata: head.Metadata ?? {},
+          },
+          tags,
+        });
+      } catch (err) {
+        return sendAwsError(reply, err);
+      }
+    }
+  );
+
   server.get<{ Params: { bucket: string }; Querystring: { key: string } }>(
     '/buckets/:bucket/objects/metadata',
     async (req, reply) => {
@@ -209,6 +290,30 @@ export async function s3Routes(server: FastifyInstance) {
         if (!prefix.endsWith('/')) prefix += '/';
         await s3Client.send(new PutObjectCommand({ Bucket: bucket, Key: prefix, Body: '' }));
         return reply.send({ key: prefix });
+      } catch (err) {
+        return sendAwsError(reply, err);
+      }
+    }
+  );
+
+  server.post<{ Params: { bucket: string }; Body: { oldKey: string; newKey: string } }>(
+    '/buckets/:bucket/objects/rename',
+    async (req, reply) => {
+      try {
+        const { bucket } = req.params;
+        const { oldKey, newKey } = req.body;
+        if (!oldKey || !newKey) {
+          return reply.status(400).send({ error: true, message: 'oldKey and newKey are required' });
+        }
+        await s3Client.send(
+          new CopyObjectCommand({
+            Bucket: bucket,
+            Key: newKey,
+            CopySource: `${bucket}/${encodeURIComponent(oldKey).replace(/%2F/g, '/')}`,
+          })
+        );
+        await s3Client.send(new DeleteObjectCommand({ Bucket: bucket, Key: oldKey }));
+        return reply.send({ success: true, key: newKey });
       } catch (err) {
         return sendAwsError(reply, err);
       }

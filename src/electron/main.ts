@@ -2,10 +2,12 @@ import { app, BrowserWindow, shell } from 'electron';
 import path from 'node:path';
 import type { FastifyInstance } from 'fastify';
 import { startServer } from '../create-server.js';
+import { getClientHost } from '../lib/settings.js';
 
 let mainWindow: BrowserWindow | null = null;
 let serverInstance: FastifyInstance | null = null;
 let serverPort: number | null = null;
+let serverClientHost = '127.0.0.1';
 
 export function getPublicDir(): string {
   if (app.isPackaged) {
@@ -14,18 +16,19 @@ export function getPublicDir(): string {
   return path.join(app.getAppPath(), 'public');
 }
 
-async function startBackend(): Promise<number> {
-  const { port, server } = await startServer({
+async function startBackend(): Promise<{ port: number; clientHost: string }> {
+  process.env.LOCAL_AWS_SETTINGS_PATH = path.join(app.getPath('userData'), 'settings.json');
+
+  const { port, server, host } = await startServer({
     publicDir: getPublicDir(),
     quiet: true,
-    port: 0,
-    host: '127.0.0.1',
   });
   serverInstance = server;
-  return port;
+  const clientHost = getClientHost(host);
+  return { port, clientHost };
 }
 
-function createWindow(port: number) {
+function createWindow(port: number, clientHost: string) {
   mainWindow = new BrowserWindow({
     width: 1400,
     height: 900,
@@ -49,7 +52,7 @@ function createWindow(port: number) {
     return { action: 'deny' };
   });
 
-  mainWindow.loadURL(`http://127.0.0.1:${port}`);
+  mainWindow.loadURL(`http://${clientHost}:${port}`);
 
   mainWindow.on('closed', () => {
     mainWindow = null;
@@ -69,8 +72,10 @@ if (!gotLock) {
 
   app.whenReady().then(async () => {
     try {
-      serverPort = await startBackend();
-      createWindow(serverPort);
+      const { port, clientHost } = await startBackend();
+      serverPort = port;
+      serverClientHost = clientHost;
+      createWindow(port, clientHost);
     } catch (err) {
       console.error('Failed to start local-aws server:', err);
       app.quit();
@@ -85,7 +90,7 @@ if (!gotLock) {
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0 && serverPort) {
-      createWindow(serverPort);
+      createWindow(serverPort, serverClientHost);
     }
   });
 

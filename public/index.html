@@ -38,6 +38,9 @@
       <div class="status-dot" id="statusDot" aria-hidden="true"></div>
       <span id="statusText">LocalStack</span>
     </div>
+    <button class="theme-toggle" data-action="navigate" data-page="settings" title="Settings" aria-label="Settings">
+      <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+    </button>
     <button class="theme-toggle" data-action="toggle-theme" title="Toggle light/dark mode" aria-label="Toggle theme">
       <span id="themeIcon" class="icon icon-sm" aria-hidden="true"></span>
     </button>
@@ -261,6 +264,21 @@
             </svg>
           </span>
           Executions
+        </button>
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-section">
+        <button type="button" class="sidebar-label" data-action="toggle-sidebar-section" aria-expanded="true">
+          App
+          <span class="sidebar-chevron icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <button type="button" class="nav-item" data-page="settings" data-action="navigate">
+          <span class="nav-icon icon icon-sm" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </span>
+          Settings
         </button>
       </div>
     </nav>
@@ -829,6 +847,86 @@
           <div id="executionHistoryWrap" class="data-panel"></div>
         </div>
       </div>
+
+      <div id="page-settings" class="tab-panel">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Settings</div>
+            <div class="page-subtitle">Configure the local-aws server host and port</div>
+          </div>
+        </div>
+        <div class="card card-narrow">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+              Server
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="settingsStatus" class="settings-status"></div>
+            <div class="form-group">
+              <label class="form-label" for="settingsHost">Host</label>
+              <input class="form-input" id="settingsHost" type="text" autocomplete="off" spellcheck="false" />
+              <div class="form-hint">Default: <code id="settingsDefaultHost">0.0.0.0</code> — use <code>127.0.0.1</code> to restrict to localhost</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="settingsPort">Port</label>
+              <input class="form-input" id="settingsPort" type="number" min="1" max="65535" step="1" />
+              <div class="form-hint">Default: <code id="settingsDefaultPort">4580</code></div>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" data-action="reset-settings">Reset to defaults</button>
+              <button type="button" class="btn btn-primary" data-action="save-settings">Save settings</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card-narrow" style="margin-top:16px">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="icon icon-sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+              AWS Profiles
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="form-hint" style="margin-bottom:12px">Profiles store endpoint, region, and credentials. The active profile is restored when the app opens.</div>
+            <div id="profileList" class="profile-list"></div>
+            <div class="form-group">
+              <label class="form-label" for="profileName">Profile name</label>
+              <input class="form-input" id="profileName" type="text" autocomplete="off" spellcheck="false" placeholder="LocalStack" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="profileEndpoint">Endpoint URL</label>
+              <input class="form-input" id="profileEndpoint" type="url" autocomplete="off" spellcheck="false" />
+              <div class="form-hint">Default: <code id="profileDefaultEndpoint">http://localhost:4566</code></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="profileRegion">Region</label>
+              <input class="form-input" id="profileRegion" type="text" autocomplete="off" spellcheck="false" />
+              <div class="form-hint">Default: <code id="profileDefaultRegion">us-east-1</code></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="profileAccessKey">Access key ID</label>
+              <input class="form-input" id="profileAccessKey" type="text" autocomplete="off" spellcheck="false" />
+              <div class="form-hint">Default: <code id="profileDefaultAccessKey">test</code></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="profileSecretKey">Secret access key</label>
+              <input class="form-input" id="profileSecretKey" type="password" autocomplete="off" spellcheck="false" />
+            </div>
+            <div class="form-actions">
+              <div class="form-actions-left">
+                <button type="button" class="btn btn-secondary" data-action="new-profile">New profile</button>
+                <button type="button" class="btn btn-danger" data-action="delete-profile">Delete</button>
+              </div>
+              <div class="form-actions-left">
+                <button type="button" class="btn btn-secondary" data-action="activate-profile">Use profile</button>
+                <button type="button" class="btn btn-primary" data-action="save-profile">Save profile</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
   </div>
 </div>
@@ -1179,6 +1277,28 @@
   </div>
 </div>
 
+<!-- Rename Object -->
+<div class="modal-overlay" id="modal-rename-object" role="dialog" aria-modal="true" aria-labelledby="renameObjectTitle" aria-hidden="true">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="renameObjectTitle">Rename Object</div>
+      <button type="button" class="modal-close" data-action="close-modal" data-modal="modal-rename-object" aria-label="Close">
+        <span class="icon icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label" for="renameObjectKey">New key</label>
+        <input class="form-input monospace" id="renameObjectKey" placeholder="path/to/new-name.jpg" spellcheck="false" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-action="close-modal" data-modal="modal-rename-object">Cancel</button>
+      <button class="btn btn-primary" data-action="confirm-rename-object">Rename</button>
+    </div>
+  </div>
+</div>
+
 <!-- Copy Object -->
 <div class="modal-overlay" id="modal-copy-object" role="dialog" aria-modal="true" aria-labelledby="copyObjectTitle" aria-hidden="true">
   <div class="modal">
@@ -1208,7 +1328,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn btn-secondary" data-action="close-modal" data-modal="modal-copy-object">Cancel</button>
-      <button class="btn btn-primary" data-action="copy-object">Copy</button>
+      <button class="btn btn-primary" data-action="confirm-copy-object">Copy</button>
     </div>
   </div>
 </div>

@@ -11,6 +11,7 @@ import { handleLambdaAction, initLambdaListeners } from './lambda.js';
 import { handleLogsAction, initLogsListeners } from './logs.js';
 import { handleEventbridgeAction, initEventbridgeListeners } from './eventbridge.js';
 import { handleStepfunctionsAction, initStepfunctionsListeners } from './stepfunctions.js';
+import { handleSettingsAction, initSettingsListeners } from './settings.js';
 
 const SQS_ACTIONS = new Set([
   'create-queue', 'publish-message', 'add-publish-attribute', 'remove-publish-attribute',
@@ -19,8 +20,10 @@ const SQS_ACTIONS = new Set([
 ]);
 
 const S3_ACTIONS = new Set([
-  'create-bucket', 'delete-bucket', 'open-bucket', 'view-file', 'copy-object',
-  'copy-presign-url', 'create-folder', 'delete-object', 'load-more-objects', 'upload-files',
+  'create-bucket', 'delete-bucket', 'open-bucket', 'object-details', 'object-tab',
+  'object-preview', 'open-copy-object', 'confirm-copy-object', 'open-rename-object',
+  'confirm-rename-object', 'copy-field', 'copy-presign-url', 'create-folder',
+  'delete-object', 'close-object-inspector', 'load-more-objects', 'upload-files',
 ]);
 
 const DYNAMO_ACTIONS = new Set([
@@ -45,6 +48,11 @@ const LOGS_ACTIONS = new Set(['open-log-group', 'refresh-logs', 'refresh-log-eve
 const EVENTBRIDGE_ACTIONS = new Set(['delete-rule', 'send-event', 'send-event-modal']);
 
 const SFN_ACTIONS = new Set(['start-execution', 'start-sfn-execution', 'view-executions', 'view-execution-history']);
+
+const SETTINGS_ACTIONS = new Set([
+  'save-settings', 'reset-settings', 'new-profile', 'save-profile',
+  'activate-profile', 'delete-profile', 'select-profile',
+]);
 
 function toggleSidebarSection(el) {
   const section = el.closest('.sidebar-section');
@@ -99,6 +107,7 @@ function dispatchAction(action, el, event) {
   if (LOGS_ACTIONS.has(action)) return handleLogsAction(action, el);
   if (EVENTBRIDGE_ACTIONS.has(action)) return handleEventbridgeAction(action, el);
   if (SFN_ACTIONS.has(action)) return handleStepfunctionsAction(action, el);
+  if (SETTINGS_ACTIONS.has(action)) return handleSettingsAction(action, el);
   handleGlobalAction(action, el, event);
 }
 
@@ -147,6 +156,7 @@ function init() {
   initLogsListeners();
   initEventbridgeListeners();
   initStepfunctionsListeners();
+  initSettingsListeners();
 
   checkHealth();
   loadQueues();
