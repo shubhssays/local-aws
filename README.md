@@ -30,7 +30,66 @@ npm run dev
 
 Open [http://localhost:4580](http://localhost:4580).
 
-Production-style run:
+### Desktop app (Electron)
+
+Install **local-aws** as a normal app in your Applications / Start Menu — no `npm run electron:dev` needed after the first install.
+
+**macOS** — run once from the project folder:
+
+```bash
+./local-aws-mac.sh
+```
+
+This builds the app (first time only), installs `local-aws.app` to **Applications**, and launches it. After that, open it from **Spotlight**, **Launchpad**, or the **Dock** like any other app.
+
+To rebuild after code changes:
+
+```bash
+./local-aws-mac.sh --reinstall
+```
+
+Or manually:
+
+```bash
+npm run install:mac   # build + copy to /Applications
+npm run open:mac      # launch installed app
+```
+
+**First launch on macOS:** Because the app is unsigned, you may need **Right-click → Open** the first time (not double-click).
+
+**Windows:**
+
+```bat
+local-aws-windows.bat
+```
+
+Runs the NSIS installer and adds local-aws to the Start Menu.
+
+**Linux:**
+
+```bash
+./local-aws-linux.sh
+```
+
+Installs an AppImage and desktop entry under your application menu.
+
+**Developers** (hot reload):
+
+```bash
+npm run electron:dev
+```
+
+Build installers without installing:
+
+```bash
+npm run dist:mac    # .dmg + .app in release/
+npm run dist:win    # NSIS installer in release/
+npm run dist:linux  # AppImage + .deb in release/
+```
+
+The desktop app embeds the API server. **LocalStack must still run separately** (e.g. `docker compose up -d`).
+
+Production-style CLI run:
 
 ```bash
 npm run build
@@ -68,7 +127,13 @@ The topbar shows how many services are reachable (e.g. `8/10 services connected`
 | `npm run build` | Compile TypeScript to `dist/` |
 | `npm start` | Run the compiled server |
 | `npm run typecheck` | Type-check without emitting |
-| `npm run clean` | Remove `dist/` |
+| `npm run clean` | Remove `dist/` and `release/` |
+| `npm run electron:dev` | Build and launch the Electron desktop app |
+| `npm run electron:watch` | Rebuild and relaunch Electron on file changes |
+| `npm run dist` | Build installers for the current OS (`release/`) |
+| `npm run dist:mac` | Build macOS `.dmg` / `.zip` |
+| `npm run dist:win` | Build Windows NSIS installer |
+| `npm run dist:linux` | Build Linux AppImage and `.deb` |
 
 ## Features
 
@@ -228,14 +293,13 @@ local-aws/
 │   ├── index.html       # UI shell and page panels
 │   ├── app.css          # Styles
 │   └── js/              # ES module frontend
-│       ├── main.js      # Entry point, event delegation
-│       ├── core.js      # Shared state, API, navigation
-│       ├── sqs.js, s3.js, dynamodb.js, ...
 ├── src/
+│   ├── create-server.ts # Shared Fastify app factory
+│   ├── server.ts        # CLI entry (browser)
+│   ├── electron/main.ts # Electron main process
 │   ├── aws.ts           # SDK client factory
-│   ├── server.ts        # Fastify entry point
-│   ├── lib/aws-error.ts # Error normalization
 │   └── routes/          # Per-service API routes
+├── build/               # Optional app icons for electron-builder
 ├── docker-compose.yml   # LocalStack with all services
 └── tsup.config.ts
 ```

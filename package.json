@@ -4,13 +4,25 @@
   "description": "LocalStack dev console for S3, SQS, DynamoDB, SNS, Secrets, Lambda, Logs, EventBridge, and Step Functions",
   "private": true,
   "type": "module",
-  "main": "./dist/server.js",
+  "main": "dist/electron/main.cjs",
+  "author": "Shubham Kumar Shukla",
+  "license": "MIT",
   "scripts": {
     "dev": "tsup --watch --onSuccess \"node dist/server.js\"",
     "build": "tsup",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist release",
+    "electron": "electron .",
+    "electron:dev": "npm run build && electron .",
+    "electron:watch": "tsup --watch --onSuccess \"electron .\"",
+    "pack": "npm run build && electron-builder --dir",
+    "dist": "npm run build && electron-builder",
+    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:win": "npm run build && electron-builder --win",
+    "dist:linux": "npm run build && electron-builder --linux",
+    "install:mac": "npm run dist:mac && ditto release/mac-arm64/local-aws.app /Applications/local-aws.app",
+    "open:mac": "open -a local-aws"
   },
   "dependencies": {
     "@aws-sdk/client-cloudwatch-logs": "^3.1075.0",
@@ -33,8 +45,48 @@
   },
   "devDependencies": {
     "@types/node": "^24.1.0",
+    "electron": "^35.0.0",
+    "electron-builder": "^25.1.8",
     "rimraf": "^6.0.1",
     "tsup": "^8.3.5",
     "typescript": "^5.8.3"
+  },
+  "build": {
+    "appId": "com.local-aws.app",
+    "productName": "local-aws",
+    "copyright": "Copyright © 2026 Shubham Kumar Shukla",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "public",
+        "to": "public",
+        "filter": ["**/*"]
+      }
+    ],
+    "asar": true,
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "target": ["dmg", "zip"],
+      "darkModeSupport": true,
+      "identity": null
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "category": "Development"
+    },
+    "win": {
+      "target": ["nsis"]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   }
 }
